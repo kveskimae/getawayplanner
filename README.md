@@ -1,12 +1,12 @@
 # Company Getaway Planner
 
-The participants get divided into teams and each team will be performing various activities.
-
 This app plans a day of activities, which start in the morning with a morning track.
+
+The company employees get divided into teams and each team will be performing various activities.
 
 The morning track goes till lunch (for example, at noon).
 
-Evening track continues after noon and ends with the motivational presentation.
+Evening track continues after lunch and ends with the motivational presentation.
 
 Teams (for example, team 1 and team 2) go through activities at the same time.
 
@@ -20,7 +20,7 @@ Provided activities are by default in the file
 This is a text file with a list of activities:
 * Activity lengths are either in minutes or 'sprint', which denotes 15 minutes;
 * There can no gap between each activity in the morning track;
-* Provided activities need to provide exact partitions for the length of morning track;
+* Regarding previous: provided activities need to fill exactly for the lengths of different teams' morning tracks;
 * Evening tracks are partitioned as equally as possible between the teams, but some teams may have to wait for the start of the evening presentation. 
 
 ## Configuration
@@ -49,7 +49,7 @@ The runner starts from
 
 The suggested schedule gets printed to program output.
 
-This solution greedily uses the longer activities first, leaving short-timed activities for the evening.
+This solution greedily uses the longer activities first, leaving short-timed activities for the day's end in the evening.
 
 ## Demo data
 
@@ -58,4 +58,5 @@ Using out-of-box configuration and activities:
 * Two teams go trough provided activities;
 * Lunch is served at noon;
 * Activities resume from 1pm and must finish in time for a presentation;
-* The presentation can start no earlier than 4:00 and no later than 5:00.
+* The presentation can start no earlier than 4:00 and no later than 5:00;
+* The presentation starts at 5:00 due to lots of activities.
