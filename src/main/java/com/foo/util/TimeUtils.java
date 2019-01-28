@@ -1,16 +1,23 @@
-package com.foo.activity;
+package com.foo.util;
 
+import com.foo.activity.ActivityConstants;
 import com.foo.exception.ActivityException;
 
 import java.time.Duration;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 
-class TimeParser implements ActivityConstants {
+public class TimeUtils implements ActivityConstants {
 
-	static Duration parseTime(String line) {
+	static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
+
+	public static String formatTime(LocalTime time) {
+		return time.format(formatter);
+	}
+
+	public static Duration parseTime(String line) {
 		Matcher m = TIME_PATTERN.matcher(line);
 
 		int ret;
@@ -28,9 +35,9 @@ class TimeParser implements ActivityConstants {
 				);
 			}
 
-			if ("sprint".equals(result)) {
+			if (SPRINT_DURATION_NAME.equals(result)) {
 
-				return Duration.of(FIXED_LENGTH_MINS, ChronoUnit.MINUTES);
+				return Duration.of(SPRINT_DURATION_MINS, ChronoUnit.MINUTES);
 
 			} else {
 
@@ -53,5 +60,4 @@ class TimeParser implements ActivityConstants {
 
 		return Duration.of(ret, ChronoUnit.MINUTES);
 	}
-
 }

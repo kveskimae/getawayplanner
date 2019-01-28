@@ -7,12 +7,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.foo.util.TimeUtils.*;
+
 import static java.util.Objects.isNull;
 
 public class ScheduleToStringBuilder {
-
-	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
-
 	private final Schedule schedule;
 
 	private final ScheduleConfiguration configuration;
@@ -92,7 +91,7 @@ public class ScheduleToStringBuilder {
 
 	private void addMotivationPresentation() {
 
-		sb.append(motivationPresentationStartTime.format(formatter));
+		sb.append(formatTime(motivationPresentationStartTime));
 
 		sb.append(" : ");
 
@@ -108,7 +107,7 @@ public class ScheduleToStringBuilder {
 
 	private void addLunchBreak() {
 
-		sb.append(nextStartTime.format(formatter));
+		sb.append(formatTime(nextStartTime));
 
 		sb.append(" : ");
 
@@ -133,7 +132,7 @@ public class ScheduleToStringBuilder {
 
 			Activity cur = it.next();
 
-			sb.append(nextStartTime.format(formatter));
+			sb.append(formatTime(nextStartTime));
 
 			sb.append(" : ");
 

@@ -1,6 +1,7 @@
 package com.foo.activity;
 
 import com.foo.exception.ActivityException;
+import com.foo.util.TimeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -27,7 +28,7 @@ public class Activity implements ActivityConstants {
 	}
 
 	public static Activity parseActivity(String s) {
-		Duration duration = TimeParser.parseTime(s);
+		Duration duration = TimeUtils.parseTime(s);
 
 		String name = NameParser.parseName(s);
 

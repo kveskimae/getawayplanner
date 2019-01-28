@@ -1,6 +1,7 @@
 package com.foo.activity;
 
 import com.foo.exception.ActivityException;
+import com.foo.util.TimeUtils;
 import org.junit.jupiter.api.Test;
 
 
@@ -79,7 +80,7 @@ public class ActivityTests {
 	public void throwsIfHours() {
 		assertThrows(ActivityException.class,
 				() -> {
-					TimeParser.parseTime("Time Tracker 1hr");
+					TimeUtils.parseTime("Time Tracker 1hr");
 				});
 	}
 

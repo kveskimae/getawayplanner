@@ -10,15 +10,15 @@ public interface ActivityConstants {
 
 	MAXIMUM_ALLOWED_ACTIVITY_DURATION_MINS = 120,
 
-	FIXED_LENGTH_MINS = 15;
+	SPRINT_DURATION_MINS = 15;
 
-	String FIXED_LENGTH_NAME = "sprint",
+	String SPRINT_DURATION_NAME = "sprint",
 
 	TIME_REGEX = String.format(
 
 			"([\\d]+min|%s)",
 
-			FIXED_LENGTH_NAME
+			SPRINT_DURATION_NAME
 	);
 
 	Pattern TIME_PATTERN = Pattern.compile(TIME_REGEX);
