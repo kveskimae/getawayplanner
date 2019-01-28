@@ -2,6 +2,7 @@ package com.foo.schedule.planner;
 
 import com.foo.activity.ActivitiesFileReader;
 import com.foo.activity.Activity;
+import com.foo.exception.ScheduleException;
 import com.foo.schedule.ScheduleConfiguration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +44,7 @@ public class Length2ActivitiesMapTests {
 		length2ActivitiesMap.mins2Count.clear();
 		length2ActivitiesMap.mins2Count.put(100, Arrays.asList(new Activity("test1", 100)));
 
-		assertThrows(IllegalArgumentException.class,
+		assertThrows(ScheduleException.class,
 				() -> {
 					length2ActivitiesMap.validate(configuration);
 				});

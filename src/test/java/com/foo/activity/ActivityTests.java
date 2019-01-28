@@ -1,5 +1,6 @@
 package com.foo.activity;
 
+import com.foo.exception.ActivityException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,7 +33,7 @@ public class ActivityTests {
 
 	@Test
 	public void throwsIfTimeNegative() {
-		assertThrows(IllegalArgumentException.class,
+		assertThrows(ActivityException.class,
 				() -> {
 					new Activity("Duck Herding", -40);
 				});
@@ -40,7 +41,7 @@ public class ActivityTests {
 
 	@Test
 	public void throwsNameIsEmpty() {
-		assertThrows(IllegalArgumentException.class,
+		assertThrows(ActivityException.class,
 				() -> {
 					new Activity("    	", 40);
 				});
@@ -48,7 +49,7 @@ public class ActivityTests {
 
 	@Test
 	public void throwsNameIsNull() {
-		assertThrows(NullPointerException.class,
+		assertThrows(ActivityException.class,
 				() -> {
 					new Activity(null, 40);
 				});
@@ -72,7 +73,7 @@ public class ActivityTests {
 
 	@Test
 	public void throwsIfHours() {
-		assertThrows(IllegalArgumentException.class,
+		assertThrows(ActivityException.class,
 				() -> {
 					TimeParser.parseTime("Time Tracker 1hr");
 				});

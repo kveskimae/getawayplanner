@@ -1,22 +1,10 @@
 package com.foo.activity;
 
+import com.foo.exception.ActivityException;
+
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-class TimeParser {
-
-	static final String FIXED_LENGTH_NAME = "sprint";
-
-	static final int FIXED_LENGTH_MINS = 15;
-
-	static final String TIME_REGEX = String.format(
-
-			"([\\d]+min|%s)",
-
-			FIXED_LENGTH_NAME
-	);
-
-	static final Pattern TIME_PATTERN = Pattern.compile(TIME_REGEX);
+class TimeParser implements ActivityConstants {
 
 	static int parseTime(String line) {
 		Matcher m = TIME_PATTERN.matcher(line);
@@ -28,7 +16,7 @@ class TimeParser {
 			String result = m.group();
 
 			if (m.find()) {
-				throw new IllegalArgumentException(
+				throw new ActivityException(
 						String.format(
 								"Multiple activity times encountered in line '%s'",
 								line
@@ -50,7 +38,7 @@ class TimeParser {
 
 		} else {
 
-			throw new IllegalArgumentException(
+			throw new ActivityException(
 					String.format(
 							"No activity time found in line '%s'",
 							line

@@ -1,6 +1,7 @@
 package com.foo.activity;
 
 
+import com.foo.exception.ActivityException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,7 +21,7 @@ public class TimeParserTests {
 
 	@Test
 	public void throwsIfHours() {
-		assertThrows(IllegalArgumentException.class,
+		assertThrows(ActivityException.class,
 				() -> {
 					TimeParser.parseTime("Time Tracker 1hr");
 				});

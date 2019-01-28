@@ -6,11 +6,14 @@ import com.foo.schedule.ScheduleConfiguration;
 
 import java.util.List;
 
-public class SchedulePlanner {
+public class SchedulePlanner implements ScheduleConstants {
 
 	public static Schedule plan(
+
 			List<Activity> activities,
+
 			ScheduleConfiguration scheduleConfiguration
+
 	) {
 		Length2ActivitiesMap length2ActivitiesMap = new Length2ActivitiesMap(activities);
 

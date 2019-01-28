@@ -1,16 +1,18 @@
 package com.foo.schedule.planner;
 
 import com.foo.activity.Activity;
+import com.foo.exception.ScheduleException;
 import com.foo.schedule.ScheduleConfiguration;
-import org.apache.commons.lang3.Validate;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-class MorningTracksPlanner {
+class MorningTracksPlanner implements ScheduleConstants {
 
 	static List<List<Activity>> extractTracks(
+
 			Length2ActivitiesMap length2ActivitiesMap,
+
 			ScheduleConfiguration scheduleConfiguration
 	) {
 
@@ -19,8 +21,11 @@ class MorningTracksPlanner {
 		for (int i = 0; i < scheduleConfiguration.noOfTeams; i++) {
 
 			List<Activity> morningTrack =
+
 					findExactCombination(
+
 							scheduleConfiguration.morningLengthMin,
+
 							length2ActivitiesMap.mins2Count
 					);
 
@@ -30,13 +35,59 @@ class MorningTracksPlanner {
 		return ret;
 	}
 
-	static List<Activity> findExactCombination(int requiredMins, TreeMap<Integer, List<Activity>> mins2Count) {
-		Validate.inclusiveBetween(1, 600, requiredMins, String.format("Parameter time is out of range: %d", requiredMins));
-		Validate.notEmpty(mins2Count, "Parameter time counts map is empty");
+	static List<Activity> findExactCombination(
+			int requiredMins,
+
+			TreeMap<Integer, List<Activity>> mins2Count
+	) {
+
+		if (requiredMins < MINIMUM_MORNING_TRACK_LENGTH_MINS || requiredMins > MAXIMUM_MORNING_TRACK_LENGTH_MINS) {
+
+			throw new ScheduleException(
+
+					String.format(
+
+							String.format(
+
+									"Parameter morning track length %dmin is out of range [%d-%d]min",
+
+									requiredMins,
+
+									MINIMUM_MORNING_TRACK_LENGTH_MINS,
+
+									MAXIMUM_MORNING_TRACK_LENGTH_MINS
+
+							),
+
+							requiredMins,
+
+							MINIMUM_MORNING_TRACK_LENGTH_MINS,
+
+							MAXIMUM_MORNING_TRACK_LENGTH_MINS
+
+					)
+
+			);
+
+		}
+
+		if (mins2Count == null) {
+
+			throw new ScheduleException("Parameter time counts map is null");
+
+		} else if (mins2Count.isEmpty()) {
+
+			throw new ScheduleException("Parameter time counts map is empty");
+
+		}
 
 		Optional<List<Activity>> maybeCombination = recursivelyFindExactCombination(requiredMins, mins2Count, new ArrayList<Activity>());
 
-		Validate.isTrue(maybeCombination.isPresent(), "No combination found");
+		if (!maybeCombination.isPresent()) {
+
+			throw new IllegalArgumentException("No combination found");
+
+		}
 
 		return maybeCombination.get();
 	}
@@ -50,10 +101,13 @@ class MorningTracksPlanner {
 			List<Activity> oldCount = mins2Count.get(key);
 
 			Activity activity = oldCount.get(0);
+
 			oldCount.remove(activity);
 
 			if (oldCount.isEmpty()) {
+
 				mins2Count.remove(key);
+
 			}
 
 			pathThisFar.add(activity);
@@ -61,49 +115,25 @@ class MorningTracksPlanner {
 			int time = pathThisFar.stream().mapToInt(x -> x.mins).sum();
 
 			if (time == requiredMins) {
+
 				return Optional.of(pathThisFar);
+
 			} else if (time < requiredMins) {
+
 				Optional<List<Activity>> found = recursivelyFindExactCombination(requiredMins, mins2Count, pathThisFar);
 
 				if (found.isPresent()) {
+
 					return found;
+
 				}
 			}
 
 			oldCount.add(activity);
-			mins2Count.put(key, oldCount);
-			pathThisFar.remove(pathThisFar.size() - 1);
-
-
-			/*
-			Integer oldCount = mins2Count.get(key);
-
-			Integer newCount = oldCount - 1;
-
-			if (newCount > 0) {
-				mins2Count.put(key, newCount);
-			} else {
-				mins2Count.remove(key);
-			}
-
-			pathThisFar.add(key);
-
-			int time = pathThisFar.stream().mapToInt(x -> x).sum();
-
-			if (time == requiredMins) {
-				return Optional.of(pathThisFar);
-			} else if (time < requiredMins) {
-				Optional<List<Activity>> found = recursivelyFindExactCombination(requiredMins, mins2Count, pathThisFar);
-
-				if (found.isPresent()) {
-					return found;
-				}
-			}
 
 			mins2Count.put(key, oldCount);
-			pathThisFar.remove(pathThisFar.size() - 1);
-			*/
 
+			pathThisFar.remove(pathThisFar.size() - 1);
 		}
 		return Optional.empty();
 	}

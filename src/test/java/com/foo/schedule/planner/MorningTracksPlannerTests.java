@@ -1,6 +1,7 @@
 package com.foo.schedule.planner;
 
 import com.foo.activity.Activity;
+import com.foo.exception.ScheduleException;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -68,7 +69,7 @@ public class MorningTracksPlannerTests {
 
 	@Test
 	public void totalTimeOutOfRangeFails() {
-		assertThrows(IllegalArgumentException.class,
+		assertThrows(ScheduleException.class,
 				() -> {
 					MorningTracksPlanner.findExactCombination(60, new TreeMap<>());
 				});

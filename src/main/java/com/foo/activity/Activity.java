@@ -1,24 +1,24 @@
 package com.foo.activity;
 
-import org.apache.commons.lang3.Validate;
+import com.foo.exception.ActivityException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class Activity {
+public class Activity implements ActivityConstants {
 
 	public final String name;
 
 	public final int mins;
 
 	public Activity(String name, int mins) {
-		Validate.notBlank(name, "Illegal activity name");
+		if (StringUtils.isBlank(name)) {
+			throw new ActivityException("Empty activity name encountered");
+		}
 
-		Validate.exclusiveBetween(
-				1,
-				120,
-				mins,
-				String.format("Illegal length: %d", mins)
-		);
+		if (mins < MINIMUM_ALLOWED_ACTIVITY_LENGTH_MINS || mins > MAXIMUM_ALLOWED_ACTIVITY_LENGTH_MINS) {
+			throw new ActivityException(String.format("Illegal activity duration: %d", mins));
+		}
 
 		this.name = name;
 		this.mins = mins;

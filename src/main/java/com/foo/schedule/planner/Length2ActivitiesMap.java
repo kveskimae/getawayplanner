@@ -1,14 +1,14 @@
 package com.foo.schedule.planner;
 
 import com.foo.activity.Activity;
+import com.foo.exception.ScheduleException;
 import com.foo.schedule.ScheduleConfiguration;
-import org.apache.commons.lang3.Validate;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
-class Length2ActivitiesMap {
+class Length2ActivitiesMap implements ScheduleConstants {
 
 	final TreeMap<Integer, List<Activity>> mins2Count = new TreeMap<>();
 
@@ -54,26 +54,27 @@ class Length2ActivitiesMap {
 
 		int maxTotalMins = minTotalMins + configuration.noOfTeams * configuration.eveningFlexMin;
 
-		Validate.inclusiveBetween(
+		int totalTime = getTotalTime();
 
-				minTotalMins,
+		if (totalTime < minTotalMins || totalTime > maxTotalMins) {
 
-				maxTotalMins,
+			throw new ScheduleException(
 
-				getTotalTime(),
+					String.format(
 
-				String.format(
+							"Supplied activities total time %dmin does not fit in configured range [%d-%d]min",
 
-						"Activities time %d does not fit in range [%d-%d]",
+							totalTime,
 
-						getTotalTime(),
+							minTotalMins,
 
-						minTotalMins,
+							maxTotalMins
 
-						maxTotalMins
+					)
 
-				)
-		);
+			);
+
+		}
 	}
 
 }
