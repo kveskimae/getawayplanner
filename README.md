@@ -60,3 +60,11 @@ Using out-of-box configuration and activities:
 * Activities resume from 1pm and must finish in time for a presentation;
 * The presentation can start no earlier than 4:00 and no later than 5:00;
 * The presentation starts at 5:00 due to lots of activities.
+
+Successful execution should start with printing out following lines:
+
+Team 1:
+
+09:00 AM : Duck Herding 60min
+
+10:00 AM : Laser Clay Shooting 60min
