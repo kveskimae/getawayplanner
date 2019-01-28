@@ -11,7 +11,7 @@ class MorningTracksPlanner implements ScheduleConstants {
 
 	static List<List<Activity>> extractTracks(
 
-			Length2ActivitiesMap length2ActivitiesMap,
+			Duration2ActivitiesMap duration2ActivitiesMap,
 
 			ScheduleConfiguration scheduleConfiguration
 	) {
@@ -24,9 +24,9 @@ class MorningTracksPlanner implements ScheduleConstants {
 
 					findExactCombination(
 
-							scheduleConfiguration.morningLengthMin,
+							scheduleConfiguration.morningDurationMin,
 
-							length2ActivitiesMap.mins2Count
+							duration2ActivitiesMap.mins2Activities
 					);
 
 			ret.add(morningTrack);
@@ -38,7 +38,7 @@ class MorningTracksPlanner implements ScheduleConstants {
 	static List<Activity> findExactCombination(
 			int requiredMins,
 
-			TreeMap<Integer, List<Activity>> mins2Count
+			TreeMap<Integer, List<Activity>> mins2Activities
 	) {
 
 		if (requiredMins < MINIMUM_MORNING_TRACK_LENGTH_MINS || requiredMins > MAXIMUM_MORNING_TRACK_LENGTH_MINS) {
@@ -49,7 +49,7 @@ class MorningTracksPlanner implements ScheduleConstants {
 
 							String.format(
 
-									"Parameter morning track length %dmin is out of range [%d-%d]min",
+									"Parameter morning track duration %dmin is out of range [%d-%d]min",
 
 									requiredMins,
 
@@ -71,17 +71,17 @@ class MorningTracksPlanner implements ScheduleConstants {
 
 		}
 
-		if (mins2Count == null) {
+		if (mins2Activities == null) {
 
 			throw new ScheduleException("Parameter time counts map is null");
 
-		} else if (mins2Count.isEmpty()) {
+		} else if (mins2Activities.isEmpty()) {
 
 			throw new ScheduleException("Parameter time counts map is empty");
 
 		}
 
-		Optional<List<Activity>> maybeCombination = recursivelyFindExactCombination(requiredMins, mins2Count, new ArrayList<Activity>());
+		Optional<List<Activity>> maybeCombination = recursivelyFindExactCombination(requiredMins, mins2Activities, new ArrayList<Activity>());
 
 		if (!maybeCombination.isPresent()) {
 
@@ -92,13 +92,13 @@ class MorningTracksPlanner implements ScheduleConstants {
 		return maybeCombination.get();
 	}
 
-	private static Optional<List<Activity>> recursivelyFindExactCombination(int requiredMins, TreeMap<Integer, List<Activity>> mins2Count, List<Activity> pathThisFar) {
-		Collection<Integer> keys = mins2Count.descendingKeySet().stream().mapToInt(x -> x).boxed().collect(Collectors.toList());
+	private static Optional<List<Activity>> recursivelyFindExactCombination(int requiredMins, TreeMap<Integer, List<Activity>> mins2Activities, List<Activity> pathThisFar) {
+		Collection<Integer> keys = mins2Activities.descendingKeySet().stream().mapToInt(x -> x).boxed().collect(Collectors.toList());
 
 		for (Integer key : keys) {
 
 
-			List<Activity> oldCount = mins2Count.get(key);
+			List<Activity> oldCount = mins2Activities.get(key);
 
 			Activity activity = oldCount.get(0);
 
@@ -106,13 +106,13 @@ class MorningTracksPlanner implements ScheduleConstants {
 
 			if (oldCount.isEmpty()) {
 
-				mins2Count.remove(key);
+				mins2Activities.remove(key);
 
 			}
 
 			pathThisFar.add(activity);
 
-			int time = pathThisFar.stream().mapToInt(x -> x.mins).sum();
+			int time = pathThisFar.stream().mapToInt(x -> (int)x.duration.toMinutes()).sum();
 
 			if (time == requiredMins) {
 
@@ -120,7 +120,7 @@ class MorningTracksPlanner implements ScheduleConstants {
 
 			} else if (time < requiredMins) {
 
-				Optional<List<Activity>> found = recursivelyFindExactCombination(requiredMins, mins2Count, pathThisFar);
+				Optional<List<Activity>> found = recursivelyFindExactCombination(requiredMins, mins2Activities, pathThisFar);
 
 				if (found.isPresent()) {
 
@@ -131,7 +131,7 @@ class MorningTracksPlanner implements ScheduleConstants {
 
 			oldCount.add(activity);
 
-			mins2Count.put(key, oldCount);
+			mins2Activities.put(key, oldCount);
 
 			pathThisFar.remove(pathThisFar.size() - 1);
 		}

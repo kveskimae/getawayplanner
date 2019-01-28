@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class Length2ActivitiesMapTests {
+public class Duration2ActivitiesMapTests {
 
 	static List<Activity> activities;
 	@Autowired
@@ -33,20 +35,20 @@ public class Length2ActivitiesMapTests {
 
 	@Test
 	public void totalTimeInRangePasses() {
-		Length2ActivitiesMap length2ActivitiesMap = new Length2ActivitiesMap(activities);
+		Duration2ActivitiesMap duration2ActivitiesMap = new Duration2ActivitiesMap(activities);
 
-		length2ActivitiesMap.validate(configuration);
+		duration2ActivitiesMap.validate(configuration);
 	}
 
 	@Test
 	public void totalTimeOutOfRangeFails() {
-		Length2ActivitiesMap length2ActivitiesMap = new Length2ActivitiesMap(Arrays.asList());
-		length2ActivitiesMap.mins2Count.clear();
-		length2ActivitiesMap.mins2Count.put(100, Arrays.asList(new Activity("test1", 100)));
+		Duration2ActivitiesMap duration2ActivitiesMap = new Duration2ActivitiesMap(Arrays.asList());
+		duration2ActivitiesMap.mins2Activities.clear();
+		duration2ActivitiesMap.mins2Activities.put(100, Arrays.asList(new Activity("test1", Duration.of(100, ChronoUnit.MINUTES))));
 
 		assertThrows(ScheduleException.class,
 				() -> {
-					length2ActivitiesMap.validate(configuration);
+					duration2ActivitiesMap.validate(configuration);
 				});
 	}
 }

@@ -15,14 +15,14 @@ public class ScheduleConfiguration {
 	@Value("${schedule.morning.start_min}")
 	public int morningStartMin;
 
-	@Value("${schedule.morning.length.min}")
-	public int morningLengthMin;
+	@Value("${schedule.morning.duration.min}")
+	public int morningDurationMin;
 
-	@Value("${schedule.lunch.length.min}")
-	public int lunchLengthMin;
+	@Value("${schedule.lunch.duration.min}")
+	public int lunchDurationMin;
 
-	@Value("${schedule.evening.length.min}")
-	public int eveningLengthMin;
+	@Value("${schedule.evening.duration.min}")
+	public int eveningDurationMin;
 
 	@Value("${schedule.evening.flex.min}")
 	public int eveningFlexMin;

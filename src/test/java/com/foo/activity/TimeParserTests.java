@@ -11,12 +11,12 @@ public class TimeParserTests {
 
 	@Test
 	public void extractsMinutes() {
-		assertEquals(60, TimeParser.parseTime("Duck Herding 60min"));
+		assertEquals(60, TimeParser.parseTime("Duck Herding 60min").toMinutes());
 	}
 
 	@Test
 	public void findsSprint() {
-		assertEquals(TimeParser.FIXED_LENGTH_MINS, TimeParser.parseTime("Time Tracker sprint"));
+		assertEquals(TimeParser.FIXED_LENGTH_MINS, TimeParser.parseTime("Time Tracker sprint").toMinutes());
 	}
 
 	@Test

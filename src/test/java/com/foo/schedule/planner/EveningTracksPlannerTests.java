@@ -14,7 +14,7 @@ public class EveningTracksPlannerTests {
 
 	@Test
 	public void splitsTwo() {
-		TreeMap<Integer, List<Activity>> mins2Count = Length2ActivitiesMapBuilder.buildMap(
+		TreeMap<Integer, List<Activity>> mins2Activities = Duration2ActivitiesMapBuilder.buildMap(
 				Pair.of(60, 2)
 		);
 
@@ -22,17 +22,17 @@ public class EveningTracksPlannerTests {
 
 		scheduleConfiguration.noOfTeams = 2;
 
-		List<List<Activity>> result = EveningTracksPlanner.partitionMaximallyEqualLengths(mins2Count, scheduleConfiguration);
+		List<List<Activity>> result = EveningTracksPlanner.partitionMaximallyEqualDurations(mins2Activities, scheduleConfiguration);
 
 		assertEquals(1, result.get(0).size());
-		assertEquals(60, result.get(0).get(0).mins);
+		assertEquals(60, result.get(0).get(0).duration.toMinutes());
 		assertEquals(1, result.get(1).size());
-		assertEquals(60, result.get(1).get(0).mins);
+		assertEquals(60, result.get(1).get(0).duration.toMinutes());
 	}
 
 	@Test
 	public void fitsMultiple1() {
-		TreeMap<Integer, List<Activity>> mins2Count = Length2ActivitiesMapBuilder.buildMap(
+		TreeMap<Integer, List<Activity>> mins2Activities = Duration2ActivitiesMapBuilder.buildMap(
 				Pair.of(60, 1),
 				Pair.of(40, 1),
 				Pair.of(30, 5),
@@ -44,7 +44,7 @@ public class EveningTracksPlannerTests {
 
 		scheduleConfiguration.noOfTeams = 2;
 
-		List<List<Activity>> result = EveningTracksPlanner.partitionMaximallyEqualLengths(mins2Count, scheduleConfiguration);
+		List<List<Activity>> result = EveningTracksPlanner.partitionMaximallyEqualDurations(mins2Activities, scheduleConfiguration);
 
 		assertEquals(2, result.size());
 

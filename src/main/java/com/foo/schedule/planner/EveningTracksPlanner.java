@@ -10,15 +10,15 @@ import java.util.stream.Collectors;
 
 class EveningTracksPlanner implements ScheduleConstants {
 
-	public static List<List<Activity>> extractTracks(Length2ActivitiesMap length2ActivitiesMap, ScheduleConfiguration scheduleConfiguration) {
+	public static List<List<Activity>> extractTracks(Duration2ActivitiesMap duration2ActivitiesMap, ScheduleConfiguration scheduleConfiguration) {
 
-		return partitionMaximallyEqualLengths(length2ActivitiesMap.mins2Count, scheduleConfiguration);
+		return partitionMaximallyEqualDurations(duration2ActivitiesMap.mins2Activities, scheduleConfiguration);
 
 	}
 
-	static List<List<Activity>> partitionMaximallyEqualLengths(
+	static List<List<Activity>> partitionMaximallyEqualDurations(
 
-			TreeMap<Integer, List<Activity>> mins2Count,
+			TreeMap<Integer, List<Activity>> mins2Activities,
 
 			ScheduleConfiguration scheduleConfiguration
 
@@ -31,23 +31,23 @@ class EveningTracksPlanner implements ScheduleConstants {
 
 		}
 
-		List<Integer> minutesBig2Small = mins2Count.descendingKeySet().stream().mapToInt(x -> x).boxed().collect(Collectors.toList());
+		List<Integer> minutesBig2Small = mins2Activities.descendingKeySet().stream().mapToInt(x -> x).boxed().collect(Collectors.toList());
 
 		for (Integer minutes : minutesBig2Small) {
 
-			while (mins2Count.containsKey(minutes)) {
+			while (mins2Activities.containsKey(minutes)) {
 
 				Integer minIdx = findMinimumSumIdx(ret);
 
-				Activity activity = mins2Count.get(minutes).get(0);
+				Activity activity = mins2Activities.get(minutes).get(0);
 
-				mins2Count.get(minutes).remove(activity);
+				mins2Activities.get(minutes).remove(activity);
 
 				ret.get(minIdx).add(activity);
 
-				if (mins2Count.get(minutes).isEmpty()) {
+				if (mins2Activities.get(minutes).isEmpty()) {
 
-					mins2Count.remove(minutes);
+					mins2Activities.remove(minutes);
 
 				}
 			}
@@ -69,7 +69,7 @@ class EveningTracksPlanner implements ScheduleConstants {
 	}
 
 	static int sumList(List<Activity> integers) {
-		return integers.stream().mapToInt(x -> x.mins).sum();
+		return integers.stream().mapToInt(x -> (int)x.duration.toMinutes()).sum();
 	}
 
 }

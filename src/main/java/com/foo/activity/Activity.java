@@ -5,31 +5,33 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.time.Duration;
+
 public class Activity implements ActivityConstants {
 
 	public final String name;
 
-	public final int mins;
+	public final Duration duration;
 
-	public Activity(String name, int mins) {
+	public Activity(String name, Duration duration) {
 		if (StringUtils.isBlank(name)) {
 			throw new ActivityException("Empty activity name encountered");
 		}
 
-		if (mins < MINIMUM_ALLOWED_ACTIVITY_LENGTH_MINS || mins > MAXIMUM_ALLOWED_ACTIVITY_LENGTH_MINS) {
-			throw new ActivityException(String.format("Illegal activity duration: %d", mins));
+		if (duration.toMinutes() < MINIMUM_ALLOWED_ACTIVITY_DURATION_MINS || duration.toMinutes() > MAXIMUM_ALLOWED_ACTIVITY_DURATION_MINS) {
+			throw new ActivityException(String.format("Illegal activity duration: %dmins", duration.toMinutes()));
 		}
 
 		this.name = name;
-		this.mins = mins;
+		this.duration = duration;
 	}
 
 	public static Activity parseActivity(String s) {
-		int time = TimeParser.parseTime(s);
+		Duration duration = TimeParser.parseTime(s);
 
 		String name = NameParser.parseName(s);
 
-		return new Activity(name, time);
+		return new Activity(name, duration);
 	}
 
 	@Override
@@ -43,6 +45,6 @@ public class Activity implements ActivityConstants {
 	}
 
 	public String buildDisplayString() {
-		return String.format("%s %dmin", name, mins);
+		return String.format("%s %dmin", name, duration.toMinutes());
 	}
 }

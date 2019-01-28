@@ -18,53 +18,53 @@ public class MorningTracksPlannerTests {
 	@Test
 	public void fitsOne() {
 
-		TreeMap<Integer, List<Activity>> mins2Count = Length2ActivitiesMapBuilder.buildMap(
+		TreeMap<Integer, List<Activity>> mins2Activities = Duration2ActivitiesMapBuilder.buildMap(
 				Pair.of(60, 1)
 		);
 
-		List<Activity> result = MorningTracksPlanner.findExactCombination(60, mins2Count);
+		List<Activity> result = MorningTracksPlanner.findExactCombination(60, mins2Activities);
 
 		assertEquals(1, result.size());
-		assertEquals(60, result.get(0).mins);
+		assertEquals(60, result.get(0).duration.toMinutes());
 	}
 
 	@Test
 	public void fitsMultiple1() {
-		TreeMap<Integer, List<Activity>> mins2Count = Length2ActivitiesMapBuilder.buildMap(
+		TreeMap<Integer, List<Activity>> mins2Activities = Duration2ActivitiesMapBuilder.buildMap(
 				Pair.of(60, 1),
 				Pair.of(30, 1),
 				Pair.of(15, 1)
 		);
 
-		List<Activity> result = MorningTracksPlanner.findExactCombination(45, mins2Count);
+		List<Activity> result = MorningTracksPlanner.findExactCombination(45, mins2Activities);
 
 		assertEquals(2, result.size());
 
-		assertEquals(30, result.get(0).mins);
-		assertEquals(15, result.get(1).mins);
+		assertEquals(30, result.get(0).duration.toMinutes());
+		assertEquals(15, result.get(1).duration.toMinutes());
 
-		Assertions.assertIterableEquals(Arrays.asList(60), mins2Count.keySet());
+		Assertions.assertIterableEquals(Arrays.asList(60), mins2Activities.keySet());
 	}
 
 	@Test
 	public void fitsMultiple2() {
-		TreeMap<Integer, List<Activity>> mins2Count = Length2ActivitiesMapBuilder.buildMap(
+		TreeMap<Integer, List<Activity>> mins2Activities = Duration2ActivitiesMapBuilder.buildMap(
 				Pair.of(60, 3),
 				Pair.of(30, 5),
 				Pair.of(15, 2)
 		);
 
-		List<Activity> result = MorningTracksPlanner.findExactCombination(135, mins2Count);
+		List<Activity> result = MorningTracksPlanner.findExactCombination(135, mins2Activities);
 
 		assertEquals(3, result.size());
 
-		assertEquals(60, result.get(0).mins);
-		assertEquals(60, result.get(1).mins);
-		assertEquals(15, result.get(2).mins);
+		assertEquals(60, result.get(0).duration.toMinutes());
+		assertEquals(60, result.get(1).duration.toMinutes());
+		assertEquals(15, result.get(2).duration.toMinutes());
 
-		assertEquals(1, mins2Count.get(60).size());
-		assertEquals(5, mins2Count.get(30).size());
-		assertEquals(1, mins2Count.get(15).size());
+		assertEquals(1, mins2Activities.get(60).size());
+		assertEquals(5, mins2Activities.get(30).size());
+		assertEquals(1, mins2Activities.get(15).size());
 	}
 
 	@Test
@@ -77,7 +77,7 @@ public class MorningTracksPlannerTests {
 
 	@Test
 	public void noExactCombinationFails() {
-		TreeMap<Integer, List<Activity>> mins2Count = Length2ActivitiesMapBuilder.buildMap(
+		TreeMap<Integer, List<Activity>> mins2Activities = Duration2ActivitiesMapBuilder.buildMap(
 				Pair.of(60, 1),
 				Pair.of(30, 1),
 				Pair.of(15, 1)
@@ -85,7 +85,7 @@ public class MorningTracksPlannerTests {
 
 		assertThrows(IllegalArgumentException.class,
 				() -> {
-					MorningTracksPlanner.findExactCombination(17, mins2Count);
+					MorningTracksPlanner.findExactCombination(17, mins2Activities);
 				});
 	}
 

@@ -39,13 +39,13 @@ public class ScheduleToStringBuilder {
 
 			LocalTime startTime = getStartTime();
 
-			int allTracksMins = 0;
+			 int allTracksMins = 0;
 
-			allTracksMins += schedule.morningTracks.get(i).stream().mapToInt(activity -> activity.mins).sum();
+			 allTracksMins += schedule.morningTracks.get(i).stream().mapToInt(activity -> (int) activity.duration.toMinutes()).sum();
 
-			allTracksMins += configuration.lunchLengthMin;
+			 allTracksMins += configuration.lunchDurationMin;
 
-			allTracksMins += schedule.eveningTracks.get(i).stream().mapToInt(activity -> activity.mins).sum();
+			 allTracksMins += schedule.eveningTracks.get(i).stream().mapToInt(activity -> (int) activity.duration.toMinutes()).sum();
 
 			LocalTime endTime = startTime.plusMinutes(allTracksMins);
 
@@ -112,11 +112,11 @@ public class ScheduleToStringBuilder {
 
 		sb.append(" : ");
 
-		sb.append(String.format("Lunch Break %dmin", configuration.lunchLengthMin));
+		sb.append(String.format("Lunch Break %dmin", configuration.lunchDurationMin));
 
 		sb.append("\n");
 
-		nextStartTime = nextStartTime.plusMinutes(configuration.lunchLengthMin);
+		nextStartTime = nextStartTime.plusMinutes(configuration.lunchDurationMin);
 	}
 
 	private void addMorningTracks(int teamIdx) {
@@ -139,7 +139,7 @@ public class ScheduleToStringBuilder {
 
 			sb.append(cur.buildDisplayString()).append("\n");
 
-			nextStartTime = nextStartTime.plusMinutes(cur.mins);
+			nextStartTime = nextStartTime.plusMinutes(cur.duration.toMinutes());
 
 		}
 	}

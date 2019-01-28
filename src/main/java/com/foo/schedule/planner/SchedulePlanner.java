@@ -15,13 +15,13 @@ public class SchedulePlanner implements ScheduleConstants {
 			ScheduleConfiguration scheduleConfiguration
 
 	) {
-		Length2ActivitiesMap length2ActivitiesMap = new Length2ActivitiesMap(activities);
+		Duration2ActivitiesMap duration2ActivitiesMap = new Duration2ActivitiesMap(activities);
 
-		length2ActivitiesMap.validate(scheduleConfiguration);
+		duration2ActivitiesMap.validate(scheduleConfiguration);
 
-		List<List<Activity>> morningTracks = MorningTracksPlanner.extractTracks(length2ActivitiesMap, scheduleConfiguration);
+		List<List<Activity>> morningTracks = MorningTracksPlanner.extractTracks(duration2ActivitiesMap, scheduleConfiguration);
 
-		List<List<Activity>> eveningTracks = EveningTracksPlanner.extractTracks(length2ActivitiesMap, scheduleConfiguration);
+		List<List<Activity>> eveningTracks = EveningTracksPlanner.extractTracks(duration2ActivitiesMap, scheduleConfiguration);
 
 		Schedule schedule = new Schedule(morningTracks, eveningTracks, scheduleConfiguration);
 

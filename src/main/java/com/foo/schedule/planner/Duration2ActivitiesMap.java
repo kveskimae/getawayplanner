@@ -8,33 +8,33 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
-class Length2ActivitiesMap implements ScheduleConstants {
+class Duration2ActivitiesMap implements ScheduleConstants {
 
-	final TreeMap<Integer, List<Activity>> mins2Count = new TreeMap<>();
+	final TreeMap<Integer, List<Activity>> mins2Activities = new TreeMap<>();
 
-	Length2ActivitiesMap(List<Activity> activities) {
+	Duration2ActivitiesMap(List<Activity> activities) {
 
 		activities.stream().forEach(
 
 				activity -> {
 
-					Integer time = activity.mins;
+					Integer time = new Long(activity.duration.toMinutes()).intValue();
 
-					List<Activity> activitiesOfLength;
+					List<Activity> activitiesOfDuration;
 
-					if (mins2Count.containsKey(time)) {
+					if (mins2Activities.containsKey(time)) {
 
-						activitiesOfLength = mins2Count.get(time);
+						activitiesOfDuration = mins2Activities.get(time);
 
 					} else {
 
-						activitiesOfLength = new ArrayList<>();
+						activitiesOfDuration = new ArrayList<>();
 
 					}
 
-					activitiesOfLength.add(activity);
+					activitiesOfDuration.add(activity);
 
-					mins2Count.put(time, activitiesOfLength);
+					mins2Activities.put(time, activitiesOfDuration);
 
 				}
 		);
@@ -42,7 +42,7 @@ class Length2ActivitiesMap implements ScheduleConstants {
 
 	int getTotalTime() {
 
-		int totalActivitiesTime = mins2Count.entrySet().stream().mapToInt(entry -> entry.getKey() * entry.getValue().size()).sum();
+		int totalActivitiesTime = mins2Activities.entrySet().stream().mapToInt(entry -> entry.getKey() * entry.getValue().size()).sum();
 
 		return totalActivitiesTime;
 
@@ -50,7 +50,7 @@ class Length2ActivitiesMap implements ScheduleConstants {
 
 	void validate(ScheduleConfiguration configuration) {
 
-		int minTotalMins = configuration.noOfTeams * (configuration.morningLengthMin + configuration.eveningLengthMin);
+		int minTotalMins = configuration.noOfTeams * (configuration.morningDurationMin + configuration.eveningDurationMin);
 
 		int maxTotalMins = minTotalMins + configuration.noOfTeams * configuration.eveningFlexMin;
 

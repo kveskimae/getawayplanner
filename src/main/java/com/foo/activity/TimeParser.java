@@ -2,11 +2,15 @@ package com.foo.activity;
 
 import com.foo.exception.ActivityException;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 
 class TimeParser implements ActivityConstants {
 
-	static int parseTime(String line) {
+	static Duration parseTime(String line) {
 		Matcher m = TIME_PATTERN.matcher(line);
 
 		int ret;
@@ -26,7 +30,7 @@ class TimeParser implements ActivityConstants {
 
 			if ("sprint".equals(result)) {
 
-				return FIXED_LENGTH_MINS;
+				return Duration.of(FIXED_LENGTH_MINS, ChronoUnit.MINUTES);
 
 			} else {
 
@@ -47,7 +51,7 @@ class TimeParser implements ActivityConstants {
 
 		}
 
-		return ret;
+		return Duration.of(ret, ChronoUnit.MINUTES);
 	}
 
 }
